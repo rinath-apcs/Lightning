@@ -1,7 +1,7 @@
 Worm[] worms;
 
 void setup() {
-	worms = new Worm[1000];
+	worms = new Worm[50];
 	size(1000, 1000);
 
 	for (int i = 0; i < worms.length; i++) {
@@ -21,8 +21,8 @@ class Worm {
 
 	public Worm() {
 		speed = 2.0;
-		x = (float) Math.random() * 1000;
-		y = (float) Math.random() * 1000;
+		x = (float) Math.random() * width;
+		y = (float) Math.random() * height;
 
 		col = color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
 
@@ -30,6 +30,8 @@ class Worm {
 	}
 
 	public void step() {
+		speed = 30.0 / dist(x, y, mouseX, mouseY);
+
 		float lastX, lastY;
 		lastX = x;
 		lastY = y;
