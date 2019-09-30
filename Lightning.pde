@@ -1,8 +1,19 @@
+import java.util.*;
+
 Worm[] worms;
+boolean[][] coords;
 
 void setup() {
-	worms = new Worm[50];
 	size(1000, 1000);
+
+	worms = new Worm[100];
+
+	coords = new boolean[height / 5][width / 5];
+
+	for (boolean[] row : coords) {
+		Arrays.fill(row, true);
+	}
+
 
 	for (int i = 0; i < worms.length; i++) {
 		worms[i] = new Worm();
@@ -16,33 +27,38 @@ void draw() {
 }
 
 class Worm {
-	float x, y, direction, speed;
-	color col;
+	int x, y;
 
 	public Worm() {
-		speed = 2.0;
-		x = (float) Math.random() * width;
-		y = (float) Math.random() * height;
+		setCoords((int) (Math.random() * (width / 5 - 1)), (int) (Math.random() * (height / 5 - 1)));
+	}
 
-		col = color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
+	public void setCoords(int xPos, int yPos) {
+		x = xPos;
+		y = yPos;
 
-		direction = (int) (Math.random() * 4) * HALF_PI;
+		coords[y][x] = false;
 	}
 
 	public void step() {
-		speed = 30.0 / dist(x, y, mouseX, mouseY);
+		ArrayList<Integer[]> validCoords = new ArrayList();
 
-		float lastX, lastY;
-		lastX = x;
-		lastY = y;
-		x += speed * Math.cos(direction);
-		y += speed * Math.sin(direction);
+		if (isValid(x+1, y)) validCoords.add(new Integer[]{x+1, y});
+		if (isValid(x, y+1)) validCoords.add(new Integer[]{x, y+1});
+		if (isValid(x-1, y)) validCoords.add(new Integer[]{x-1, y});
+		if (isValid(x, y-1)) validCoords.add(new Integer[]{x, y-1});
 
-		stroke(col);
-		line(lastX, lastY, x, y);
+		if (validCoords.size() == 0) return;
 
-		if (Math.random() > 0.9) {
-			direction += Math.random() > 0.5 ? HALF_PI : -HALF_PI;
-		}
+		Integer[] rand = validCoords.get((int) (Math.random() * validCoords.size()));
+
+		fill(150);
+		line(x * 5, y * 5, rand[0] * 5, rand[1] * 5);
+
+		setCoords(rand[0], rand[1]);
+	}
+
+	public boolean isValid(int xPos, int yPos) {
+		return ((yPos < coords.length && xPos < coords.length) && (yPos >= 0 && xPos >= 0)) && coords[yPos][xPos];
 	}
 }
