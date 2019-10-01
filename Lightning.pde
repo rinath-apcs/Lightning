@@ -3,51 +3,47 @@ import java.util.*;
 ArrayList<Worm> worms;
 boolean[][] coords;
 
-final int scalar = 2;
+final int scalar = 10;
 final boolean showCoords = false;
 
 void setup() {
 	size(1000, 1000);
-
+	frameRate(-1);
 	worms = new ArrayList();
-
 	coords = new boolean[height / scalar][width / scalar];
 
-	for (boolean[] row : coords) {
+	for (boolean[] row : coords) 
 		Arrays.fill(row, true);
-	}
 
-
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 100; i++) 
 		worms.add(new Worm());
-	}
+
 }
 
 void draw() {
-    for (Worm worm : worms) {
+    for (Worm worm : worms) 
     	worm.step();
-    }
 
-    if (keyPressed) {
+    if (keyPressed) 
     	worms.add(new Worm());
-    	println("KEY PRESS");
-    }
 
-    if (showCoords) {
-    	for (int y = 0; y < coords.length; y++) {
-    		for (int x = 0; x < coords[0].length; x++) {
-    			fill(coords[y][x] ? 255 : 0, 0, 0);
-    			ellipse(x * scalar, y * scalar, scalar / 2, scalar / 2);
-    	    }
-    	}
-    }
+    if (showCoords) 
+    	drawCoords();
 }
 
 class Worm {
 	int x, y;
 
 	public Worm() {
-		setCoords((int) (Math.random() * (width / scalar - 1)), (int) (Math.random() * (height / scalar - 1)));
+		int x = (int) (Math.random() * (width / scalar - 1));
+		int y = (int) (Math.random() * (height / scalar - 1));
+
+		while (!(isValid(x, y))) {
+			x = (int) (Math.random() * (width / scalar - 1));
+			y = (int) (Math.random() * (height / scalar - 1));
+		}
+
+		setCoords(x, y);
 	}
 
 	public void setCoords(int xPos, int yPos) {
@@ -78,4 +74,13 @@ class Worm {
 	public boolean isValid(int xPos, int yPos) {
 		return ((yPos < coords.length && xPos < coords.length) && (yPos >= 0 && xPos >= 0)) && coords[yPos][xPos];
 	}
+}
+
+void drawCoords() {
+	for (int y = 0; y < coords.length; y++) {
+    	for (int x = 0; x < coords[0].length; x++) {
+    		fill(coords[y][x] ? 255 : 0, 0, 0);
+    		ellipse(x * scalar, y * scalar, scalar / 2, scalar / 2);
+    	}
+    }
 }
