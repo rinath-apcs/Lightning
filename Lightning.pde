@@ -2,15 +2,18 @@ import java.util.*;
 
 ArrayList<Worm> worms;
 boolean[][] coords;
+float keyCounter;
 
-final int scalar = 10;
+final int scalar = 1;
 final boolean showCoords = false;
 
 void setup() {
 	size(1000, 1000);
 	frameRate(-1);
+
 	worms = new ArrayList();
 	coords = new boolean[height / scalar][width / scalar];
+	keyCounter = 1.0;
 
 	for (boolean[] row : coords) 
 		Arrays.fill(row, true);
@@ -24,8 +27,14 @@ void draw() {
     for (Worm worm : worms) 
     	worm.step();
 
-    if (keyPressed) 
-    	worms.add(new Worm());
+    if (keyPressed) {
+    	for (int i = 0; i < (int) keyCounter; i++) 
+    		worms.add(new Worm());
+
+    	keyCounter += 0.25;
+    } else {
+    	keyCounter = 0;
+    }
 
     if (showCoords) 
     	drawCoords();
@@ -38,7 +47,7 @@ class Worm {
 		int x = (int) (Math.random() * (width / scalar - 1));
 		int y = (int) (Math.random() * (height / scalar - 1));
 
-		while (!(isValid(x, y))) {
+		while (!(coords[y][x])) {
 			x = (int) (Math.random() * (width / scalar - 1));
 			y = (int) (Math.random() * (height / scalar - 1));
 		}
