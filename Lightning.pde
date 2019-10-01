@@ -1,22 +1,25 @@
 import java.util.*;
 
-Worm[] worms;
+ArrayList<Worm> worms;
 boolean[][] coords;
+
+final int scalar = 2;
+final boolean showCoords = false;
 
 void setup() {
 	size(1000, 1000);
 
-	worms = new Worm[100];
+	worms = new ArrayList();
 
-	coords = new boolean[height / 5][width / 5];
+	coords = new boolean[height / scalar][width / scalar];
 
 	for (boolean[] row : coords) {
 		Arrays.fill(row, true);
 	}
 
 
-	for (int i = 0; i < worms.length; i++) {
-		worms[i] = new Worm();
+	for (int i = 0; i < 100; i++) {
+		worms.add(new Worm());
 	}
 }
 
@@ -24,13 +27,27 @@ void draw() {
     for (Worm worm : worms) {
     	worm.step();
     }
+
+    if (keyPressed) {
+    	worms.add(new Worm());
+    	println("KEY PRESS");
+    }
+
+    if (showCoords) {
+    	for (int y = 0; y < coords.length; y++) {
+    		for (int x = 0; x < coords[0].length; x++) {
+    			fill(coords[y][x] ? 255 : 0, 0, 0);
+    			ellipse(x * scalar, y * scalar, scalar / 2, scalar / 2);
+    	    }
+    	}
+    }
 }
 
 class Worm {
 	int x, y;
 
 	public Worm() {
-		setCoords((int) (Math.random() * (width / 5 - 1)), (int) (Math.random() * (height / 5 - 1)));
+		setCoords((int) (Math.random() * (width / scalar - 1)), (int) (Math.random() * (height / scalar - 1)));
 	}
 
 	public void setCoords(int xPos, int yPos) {
@@ -53,7 +70,7 @@ class Worm {
 		Integer[] rand = validCoords.get((int) (Math.random() * validCoords.size()));
 
 		fill(150);
-		line(x * 5, y * 5, rand[0] * 5, rand[1] * 5);
+		line(x * scalar, y * scalar, rand[0] * scalar, rand[1] * scalar);
 
 		setCoords(rand[0], rand[1]);
 	}
