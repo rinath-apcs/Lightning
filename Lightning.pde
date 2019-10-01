@@ -4,22 +4,14 @@ ArrayList<Worm> worms;
 boolean[][] coords;
 float keyCounter;
 
-final int scalar = 1;
+final int scalar = 3;
 final boolean showCoords = false;
 
 void setup() {
 	size(1000, 1000);
 	frameRate(-1);
 
-	worms = new ArrayList();
-	coords = new boolean[height / scalar][width / scalar];
-	keyCounter = 1.0;
-
-	for (boolean[] row : coords) 
-		Arrays.fill(row, true);
-
-	for (int i = 0; i < 100; i++) 
-		worms.add(new Worm());
+	init();
 
 }
 
@@ -28,6 +20,12 @@ void draw() {
     	worm.step();
 
     if (keyPressed) {
+    	println(key);
+    	if (key == 'r') {
+    		worms.clear();
+    		background(211);
+    		init();
+    	}
     	for (int i = 0; i < (int) keyCounter; i++) 
     		worms.add(new Worm());
 
@@ -41,11 +39,16 @@ void draw() {
 }
 
 class Worm {
+	color col;
 	int x, y;
 
 	public Worm() {
 		int x = (int) (Math.random() * (width / scalar - 1));
 		int y = (int) (Math.random() * (height / scalar - 1));
+
+		col = color((int) (Math.random() * 125),
+		(int) (Math.random() * 125),
+		(int) (Math.random() * 125));
 
 		while (!(coords[y][x])) {
 			x = (int) (Math.random() * (width / scalar - 1));
@@ -74,7 +77,7 @@ class Worm {
 
 		Integer[] rand = validCoords.get((int) (Math.random() * validCoords.size()));
 
-		fill(150);
+		stroke(col);
 		line(x * scalar, y * scalar, rand[0] * scalar, rand[1] * scalar);
 
 		setCoords(rand[0], rand[1]);
@@ -92,4 +95,16 @@ void drawCoords() {
     		ellipse(x * scalar, y * scalar, scalar / 2, scalar / 2);
     	}
     }
+}
+
+void init() {
+    worms = new ArrayList();
+	coords = new boolean[height / scalar][width / scalar];
+	keyCounter = 1.0;
+
+	for (boolean[] row : coords) 
+		Arrays.fill(row, true);
+
+	for (int i = 0; i < 100; i++) 
+		worms.add(new Worm());
 }
