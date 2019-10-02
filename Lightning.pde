@@ -4,7 +4,9 @@ ArrayList<Worm> worms;
 boolean[][] coords;
 float keyCounter;
 
-final int scalar = 3;
+final int diameter = 5;
+final int scalar = 20;
+final int startingWorms = 100;
 final boolean showCoords = false;
 
 void setup() {
@@ -12,7 +14,6 @@ void setup() {
 	frameRate(-1);
 
 	init();
-
 }
 
 void draw() {
@@ -21,15 +22,17 @@ void draw() {
 
     if (keyPressed) {
     	println(key);
+
     	if (key == 'r') {
     		worms.clear();
-    		background(211);
     		init();
+    	} else {
+    		for (int i = 0; i < (int) keyCounter; i++) 
+    			worms.add(new Worm());
     	}
-    	for (int i = 0; i < (int) keyCounter; i++) 
-    		worms.add(new Worm());
 
     	keyCounter += 0.25;
+    	
     } else {
     	keyCounter = 0;
     }
@@ -78,6 +81,7 @@ class Worm {
 		Integer[] rand = validCoords.get((int) (Math.random() * validCoords.size()));
 
 		stroke(col);
+		strokeWeight(diameter);
 		line(x * scalar, y * scalar, rand[0] * scalar, rand[1] * scalar);
 
 		setCoords(rand[0], rand[1]);
@@ -98,6 +102,8 @@ void drawCoords() {
 }
 
 void init() {
+	background(211);
+
     worms = new ArrayList();
 	coords = new boolean[height / scalar][width / scalar];
 	keyCounter = 1.0;
@@ -105,6 +111,6 @@ void init() {
 	for (boolean[] row : coords) 
 		Arrays.fill(row, true);
 
-	for (int i = 0; i < 100; i++) 
+	for (int i = 0; i < startingWorms; i++) 
 		worms.add(new Worm());
 }
