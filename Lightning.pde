@@ -15,8 +15,13 @@ void setup() {
 }
 
 void draw() {
-    for (Worm worm : worms) 
-    	worm.step();
+    for (int i = 0; i < worms.size(); i++) {
+		if (worms.get(i).isDead()) {
+			worms.remove(i);
+		} else {
+			worms.get(i).step();
+		}
+	}
 
     if (keyPressed) {
     	if (key == 'r') {
@@ -26,9 +31,7 @@ void draw() {
     		for (int i = 0; i < (int) keyCounter; i++) 
     			worms.add(new Worm());
     	}
-
     	keyCounter += 0.25;
-    	
     } else {
     	keyCounter = 0;
     }
@@ -38,10 +41,13 @@ void draw() {
 }
 
 class Worm {
+	boolean dead;
 	color col;
 	int x, y;
 
 	public Worm() {
+		dead = false;
+
 		int xPos = (int) (Math.random() * (width / scalar - 1));
 		int yPos = (int) (Math.random() * (height / scalar - 1));
 
@@ -49,9 +55,17 @@ class Worm {
 		(int) (Math.random() * 125),
 		(int) (Math.random() * 125));
 
+		int counter = 0;
+
 		while (!(coords[yPos][xPos])) {
-			xPos = (int) (Math.random() * (width / scalar - 1));
-			yPos = (int) (Math.random() * (height / scalar - 1));
+			if (counter > 50) {
+				dead = true;
+				return;
+			} else {
+				xPos = (int) (Math.random() * (width / scalar - 1));
+				yPos = (int) (Math.random() * (height / scalar - 1));
+				counter++;
+			}
 		}
 
 		setCoords(xPos, yPos);
@@ -72,7 +86,10 @@ class Worm {
 		if (isValid(x-1, y)) validCoords.add(new Integer[]{x-1, y});
 		if (isValid(x, y-1)) validCoords.add(new Integer[]{x, y-1});
 
-		if (validCoords.size() == 0) return;
+		if (validCoords.size() == 0) {
+			dead = true;
+			return;
+		}
 
 		Integer[] rand = validCoords.get((int) (Math.random() * validCoords.size()));
 
@@ -85,6 +102,10 @@ class Worm {
 
 	public boolean isValid(int xPos, int yPos) {
 		return ((yPos < coords.length && xPos < coords.length) && (yPos >= 0 && xPos >= 0)) && coords[yPos][xPos];
+	}
+
+	public boolean isDead() {
+		return dead;
 	}
 }
 
