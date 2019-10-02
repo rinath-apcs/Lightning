@@ -1,11 +1,9 @@
-import java.util.*;
-
 ArrayList<Worm> worms;
 boolean[][] coords;
 float keyCounter;
 
-final int diameter = 5;
-final int scalar = 20;
+final int diameter = 1;
+final int scalar = 3;
 final int startingWorms = 100;
 final boolean showCoords = false;
 
@@ -46,19 +44,19 @@ class Worm {
 	int x, y;
 
 	public Worm() {
-		int x = (int) (Math.random() * (width / scalar - 1));
-		int y = (int) (Math.random() * (height / scalar - 1));
+		int xPos = (int) (Math.random() * (width / scalar - 1));
+		int yPos = (int) (Math.random() * (height / scalar - 1));
 
 		col = color((int) (Math.random() * 125),
 		(int) (Math.random() * 125),
 		(int) (Math.random() * 125));
 
-		while (!(coords[y][x])) {
-			x = (int) (Math.random() * (width / scalar - 1));
-			y = (int) (Math.random() * (height / scalar - 1));
+		while (!(coords[yPos][xPos])) {
+			xPos = (int) (Math.random() * (width / scalar - 1));
+			yPos = (int) (Math.random() * (height / scalar - 1));
 		}
 
-		setCoords(x, y);
+		setCoords(xPos, yPos);
 	}
 
 	public void setCoords(int xPos, int yPos) {
@@ -108,8 +106,11 @@ void init() {
 	coords = new boolean[height / scalar][width / scalar];
 	keyCounter = 1.0;
 
-	for (boolean[] row : coords) 
-		Arrays.fill(row, true);
+	for (boolean[] row : coords) {
+		for (int i = 0; i < row.length; i++) {
+			row[i] = true;
+		}
+	}
 
 	for (int i = 0; i < startingWorms; i++) 
 		worms.add(new Worm());
