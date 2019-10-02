@@ -19,8 +19,6 @@ void draw() {
     	worm.step();
 
     if (keyPressed) {
-    	println(key);
-
     	if (key == 'r') {
     		worms.clear();
     		init();
