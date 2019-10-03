@@ -57,7 +57,7 @@ public class Worm {
 
 		stroke(col);
 		strokeWeight(diameter);
-		line(x * scalar, y * scalar, rand[0] * scalar, rand[1] * scalar);
+		line(x * scalar + (wooliness != 0 ? scalar / wooliness : 0), y * scalar + (wooliness != 0 ? scalar / wooliness : 0), rand[0] * scalar, rand[1] * scalar);
 
 		setCoords(rand[0], rand[1]);
 	}

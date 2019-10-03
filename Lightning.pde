@@ -1,10 +1,11 @@
 ArrayList<Worm> worms;
 boolean[][] coords;
-float keyCounter;
+int keyCounter;
 
-final int diameter = 1;
-final int scalar = 3;
-final int startingWorms = 100;
+final int diameter = 5;
+final int scalar = 10;
+final int startingWorms = 1;
+final float wooliness = 4;
 final boolean showCoords = false;
 
 void setup() {
@@ -28,12 +29,12 @@ void draw() {
     		worms.clear();
     		init();
     	} else {
-    		for (int i = 0; i < (int) keyCounter; i++)  {
+    		for (int i = 0; i < keyCounter/4; i++)  {
     			worms.add(new Worm());
     		}
     	}
     	
-    	keyCounter += 0.25;
+    	keyCounter++;
     } else {
     	keyCounter = 0;
     }
@@ -56,7 +57,7 @@ void init() {
 
     worms = new ArrayList();
 	coords = new boolean[height / scalar][width / scalar];
-	keyCounter = 1.0;
+	keyCounter = 1;
 
 	for (boolean[] row : coords) {
 		for (int i = 0; i < row.length; i++) {
