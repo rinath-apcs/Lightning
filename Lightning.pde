@@ -1,16 +1,18 @@
 ArrayList<Worm> worms;
 boolean[][] coords;
+boolean wooly;
 int keyCounter;
 
-final int diameter = 5;
-final int scalar = 10;
+final int diameter = 2;
+final int scalar = 4;
 final int startingWorms = 1;
-final float wooliness = 4;
+final float wooliness = 8;
 final boolean showCoords = false;
 
 void setup() {
 	size(1000, 1000);
 	frameRate(-1);
+	wooly = false;
 
 	init();
 }
@@ -41,6 +43,10 @@ void draw() {
 
     if (showCoords) 
     	drawCoords();
+}
+
+void mousePressed() {
+	wooly = !wooly;
 }
 
 void drawCoords() {
